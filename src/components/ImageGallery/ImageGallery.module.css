@@ -1,0 +1,13 @@
+.section {
+  padding: 0px 10px;
+}
+.imageList {
+  display: flex;
+}
+.imageListItem {
+  margin-right: 10px;
+  box-shadow: 5px 5px 4px 1px rgba(34, 60, 80, 0.2);
+}
+.imageListItem:last-child {
+  margin-right: 0;
+}
