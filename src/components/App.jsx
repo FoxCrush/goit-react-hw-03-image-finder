@@ -7,12 +7,6 @@ class App extends Component {
   state = {
     showModal: false,
   };
-  componentDidMount() {
-    console.log('componentDidMount event');
-  }
-  componentDidUpdate() {
-    console.log('componentDidUpdate event');
-  }
 
   toggleModal = () => {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
@@ -22,7 +16,7 @@ class App extends Component {
       <Fragment>
         <Searchbar />
         {this.state.showModal && (
-          <Modal>
+          <Modal onClose={this.toggleModal}>
             <span>Test modal messege</span>
             <span>
               Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque

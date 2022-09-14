@@ -5,6 +5,18 @@ import styles from './modal.module.css';
 const modalRoot = document.querySelector('#root-modal');
 
 class Modal extends Component {
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleEscButton);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleEscButton);
+  }
+  handleEscButton = e => {
+    if (e.code === 'Escape') {
+      this.props.onClose();
+    }
+  };
+
   render() {
     return createPortal(
       <div className={styles.Overlay}>
