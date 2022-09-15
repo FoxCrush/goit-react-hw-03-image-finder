@@ -17,7 +17,7 @@ class App extends Component {
       .get(
         `https://pixabay.com/api/?q=cat&page=1&key=${pxbKey}&image_type=photo&orientation=horizontal&per_page=12`
       )
-      .then(console.log);
+      .then(response => this.setState({ images: response.data }));
   }
 
   toggleModal = () => {
