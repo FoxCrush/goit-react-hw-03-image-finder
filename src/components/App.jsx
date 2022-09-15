@@ -1,12 +1,24 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import Searchbar from './Searchbar';
 import Modal from './Modal';
 import { Fragment } from 'react';
 
+const pxbKey = '23848637-e957cc6ba41a4b75a0e32263e';
+
 class App extends Component {
   state = {
+    images: [],
     showModal: false,
   };
+
+  componentDidMount() {
+    axios
+      .get(
+        `https://pixabay.com/api/?q=cat&page=1&key=${pxbKey}&image_type=photo&orientation=horizontal&per_page=12`
+      )
+      .then(console.log);
+  }
 
   toggleModal = () => {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
