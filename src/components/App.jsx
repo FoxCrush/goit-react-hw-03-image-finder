@@ -3,6 +3,7 @@ import axios from 'axios';
 import Searchbar from './Searchbar';
 import Modal from './Modal';
 import { Fragment } from 'react';
+import ImageGallery from './ImageGallery';
 
 const pxbKey = '23848637-e957cc6ba41a4b75a0e32263e';
 
@@ -17,17 +18,18 @@ class App extends Component {
       .get(
         `https://pixabay.com/api/?q=cat&page=1&key=${pxbKey}&image_type=photo&orientation=horizontal&per_page=12`
       )
-      .then(response => this.setState({ images: response.data }));
+      .then(response => this.setState({ images: response.data.hits }));
   }
 
   toggleModal = () => {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
   };
   render() {
+    const { showModal, images } = this.state;
     return (
       <Fragment>
         <Searchbar />
-        {this.state.showModal && (
+        {showModal && (
           <Modal onClose={this.toggleModal}>
             <span>Test modal messege</span>
             <span>
@@ -38,6 +40,7 @@ class App extends Component {
             </span>
           </Modal>
         )}
+        <ImageGallery images={images} />
       </Fragment>
     );
   }
