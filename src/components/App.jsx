@@ -5,6 +5,7 @@ import { Fragment } from 'react';
 import ImageGallery from './ImageGallery';
 import Loader from './Loader';
 import imagesApi from '../service/fetch-images-api';
+import Button from './Button';
 
 class App extends Component {
   state = {
@@ -12,6 +13,7 @@ class App extends Component {
     showModal: false,
     currentPage: 1,
     currentQuery: '',
+    isLoading: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -32,12 +34,16 @@ class App extends Component {
     };
 
     if (currentQuery.length > 0) {
-      imagesApi.fetchImages(apiOptions).then(images =>
-        this.setState(prevState => ({
-          images: [...prevState.images, ...images],
-          currentPage: prevState.currentPage + 1,
-        }))
-      );
+      this.setState({ isLoading: true });
+      imagesApi
+        .fetchImages(apiOptions)
+        .then(images =>
+          this.setState(prevState => ({
+            images: [...prevState.images, ...images],
+            currentPage: prevState.currentPage + 1,
+          }))
+        )
+        .finally(() => this.setState({ isLoading: false }));
     }
   };
 
@@ -49,16 +55,16 @@ class App extends Component {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
   };
   render() {
-    const { showModal, images } = this.state;
+    const { showModal, images, isLoading } = this.state;
     return (
       <Fragment>
         <Searchbar onNewQuerySubmit={this.onQueryChange} />
         {showModal && <Modal onClose={this.toggleModal} />}
         <ImageGallery images={images} />
-        <button type="button" onClick={this.onLoadMoreButtonClick}>
-          Load more
-        </button>
-        <Loader />
+        {isLoading && <Loader />}
+        {images.length > 0 && !isLoading && (
+          <Button onButtonClicked={this.onLoadMoreButtonClick} />
+        )}
       </Fragment>
     );
   }
