@@ -14,6 +14,7 @@ class App extends Component {
     currentPage: 1,
     currentQuery: '',
     isLoading: false,
+    currentImage: '',
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -54,13 +55,20 @@ class App extends Component {
   toggleModal = () => {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
   };
+
+  onImageClick = currentImage => {
+    this.setState({ currentImage: currentImage, showModal: true });
+  };
+
   render() {
-    const { showModal, images, isLoading } = this.state;
+    const { showModal, images, isLoading, currentImage } = this.state;
     return (
       <Fragment>
         <Searchbar onNewQuerySubmit={this.onQueryChange} />
-        {showModal && <Modal onClose={this.toggleModal} />}
-        <ImageGallery images={images} />
+        {showModal && (
+          <Modal onClose={this.toggleModal} imageToShow={currentImage} />
+        )}
+        <ImageGallery images={images} onImageClick={this.onImageClick} />
         {isLoading && <Loader />}
         {images.length > 0 && !isLoading && (
           <Button onButtonClicked={this.onLoadMoreButtonClick} />
