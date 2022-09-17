@@ -4,6 +4,7 @@ import Searchbar from './Searchbar';
 import Modal from './Modal';
 import { Fragment } from 'react';
 import ImageGallery from './ImageGallery';
+import Loader from './Loader';
 
 const pxbKey = '23848637-e957cc6ba41a4b75a0e32263e';
 
@@ -41,6 +42,7 @@ class App extends Component {
           </Modal>
         )}
         <ImageGallery images={images} />
+        <Loader />
       </Fragment>
     );
   }
