@@ -6,6 +6,8 @@ import { Fragment } from 'react';
 import ImageGallery from './ImageGallery';
 import Loader from './Loader';
 
+axios.defaults.baseURL = 'https://pixabay.com';
+
 const pxbKey = '23848637-e957cc6ba41a4b75a0e32263e';
 
 class App extends Component {
@@ -14,13 +16,15 @@ class App extends Component {
     showModal: false,
   };
 
-  componentDidMount() {
+  componentDidMount() {}
+
+  onQueryChange = q => {
     axios
       .get(
-        `https://pixabay.com/api/?q=cat&page=1&key=${pxbKey}&image_type=photo&orientation=horizontal&per_page=12`
+        `/api/?q=${q}&page=1&key=${pxbKey}&image_type=photo&orientation=horizontal&per_page=12`
       )
       .then(response => this.setState({ images: response.data.hits }));
-  }
+  };
 
   toggleModal = () => {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
@@ -29,18 +33,8 @@ class App extends Component {
     const { showModal, images } = this.state;
     return (
       <Fragment>
-        <Searchbar />
-        {showModal && (
-          <Modal onClose={this.toggleModal}>
-            <span>Test modal messege</span>
-            <span>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque
-              officiis in molestiae commodi sint minima harum aperiam. Ipsam,
-              quisquam iste! Ex perferendis itaque in adipisci ea minima quos
-              quas nesciunt!
-            </span>
-          </Modal>
-        )}
+        <Searchbar onNewQuerySubmit={this.onQueryChange} />
+        {showModal && <Modal onClose={this.toggleModal} />}
         <ImageGallery images={images} />
         <Loader />
       </Fragment>
