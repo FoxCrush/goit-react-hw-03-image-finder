@@ -1,29 +1,48 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import Searchbar from './Searchbar';
 import Modal from './Modal';
 import { Fragment } from 'react';
 import ImageGallery from './ImageGallery';
 import Loader from './Loader';
-
-axios.defaults.baseURL = 'https://pixabay.com';
-
-const pxbKey = '23848637-e957cc6ba41a4b75a0e32263e';
+import imagesApi from '../service/fetch-images-api';
 
 class App extends Component {
   state = {
     images: [],
     showModal: false,
+    currentPage: 1,
+    currentQuery: '',
   };
 
-  componentDidMount() {}
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.currentQuery !== this.state.currentQuery) {
+      this.fetchImages();
+    }
+  }
 
   onQueryChange = q => {
-    axios
-      .get(
-        `/api/?q=${q}&page=1&key=${pxbKey}&image_type=photo&orientation=horizontal&per_page=12`
-      )
-      .then(response => this.setState({ images: response.data.hits }));
+    this.setState({ currentQuery: q, images: [], currentPage: 1 });
+  };
+
+  fetchImages = () => {
+    const { currentQuery, currentPage } = this.state;
+    const apiOptions = {
+      currentQuery,
+      currentPage,
+    };
+
+    if (currentQuery.length > 0) {
+      imagesApi.fetchImages(apiOptions).then(images =>
+        this.setState(prevState => ({
+          images: [...prevState.images, ...images],
+          currentPage: prevState.currentPage + 1,
+        }))
+      );
+    }
+  };
+
+  onLoadMoreButtonClick = () => {
+    this.fetchImages();
   };
 
   toggleModal = () => {
@@ -36,6 +55,9 @@ class App extends Component {
         <Searchbar onNewQuerySubmit={this.onQueryChange} />
         {showModal && <Modal onClose={this.toggleModal} />}
         <ImageGallery images={images} />
+        <button type="button" onClick={this.onLoadMoreButtonClick}>
+          Load more
+        </button>
         <Loader />
       </Fragment>
     );
