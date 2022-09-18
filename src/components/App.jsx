@@ -44,7 +44,10 @@ class App extends Component {
             currentPage: prevState.currentPage + 1,
           }))
         )
-        .finally(() => this.setState({ isLoading: false }));
+        .finally(() => this.setState({ isLoading: false }))
+        .catch(error => {
+          alert(error.message);
+        });
     }
   };
 
