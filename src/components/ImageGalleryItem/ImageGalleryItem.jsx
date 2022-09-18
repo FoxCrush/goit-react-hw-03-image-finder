@@ -6,7 +6,7 @@ const ImageGalleryItem = ({ images, onImageClick }) =>
     <li key={image.id} className={styles.ImageGalleryItem}>
       <img
         alt={image.tags}
-        src={image.previewURL}
+        src={image.webformatURL}
         className={styles.ImageGalleryItemImage}
         onClick={() => onImageClick(image.largeImageURL)}
       ></img>
